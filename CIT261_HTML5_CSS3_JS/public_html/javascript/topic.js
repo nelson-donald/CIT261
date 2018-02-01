@@ -7,7 +7,7 @@ var fileName = location.href.split("/").slice(-1);
 //==============================================================================
 //  Description:
 //      This function is used to generate the navigation element with all the 
-//      topics. it also sets the correct menu item as active
+//      topics. It also sets the correct menu item as active
 //  
 //  Parameters:
 //      
@@ -29,8 +29,10 @@ function getMenu() {
         for(var i = 0; i < menu.items.length; i++){
           
           if( fileName == menu.items[i].fileName){
-          
               result += "<li class=\"active\"><a href=\""+menu.items[i].fileName+"\">"+menu.items[i].title+"</a></li>";
+              
+                    //update the Page Title
+              document.title = menu.items[i].title;
           }
           else
           {
@@ -42,5 +44,5 @@ function getMenu() {
         document.getElementsByTagName("nav")[0].innerHTML = result + "</ul>";
       }
     }
-xhttp.send();   
+    xhttp.send();   
 }

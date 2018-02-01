@@ -6,14 +6,20 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Topic 5</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/style.css" rel="stylesheet" type="text/css"/>
         <script src="javascript/topic.js" type="text/javascript"></script>
         <script>
-            var contacts = null;
-            var sName = "contacts";
+//==============================================================================
+//Properties
+//==============================================================================
+var contacts = null;
+
+//this is the variable that we will use to keep consistency for the naming of 
+//our local storage identifier for the contacts JSON text
+var sName = "contacts";
             
 
 //==============================================================================
@@ -54,22 +60,74 @@ function getJSON() {
     xhttp.send();   
 }
 
+
+//==============================================================================
+//  Description:
+//      This function saves my contacts object as JSON text to the local storage.
+//  
+//  Parameters:
+//            
+//  Example:
+//      saveContactsToLocalStorage();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
 function saveContactsToLocalStorage(){
     localStorage.setItem(sName, JSON.stringify(contacts));
-    //alert(contacts.items.length);
 }
 
+
+//==============================================================================
+//  Description:
+//      This function retrieves my contacts object as JSON text to the 
+//      local storage.
+//  
+//  Parameters:
+//            
+//  Example:
+//      getContactsFromLocalStorage();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
 function getContactsFromLocalStorage(){
     contacts = JSON.parse(localStorage.getItem(sName));
-                //alert(contacts.items.length);
 }
 
+
+//==============================================================================
+//  Description:
+//      This function clears the local storage contacts item.
+//  
+//  Parameters:
+//            
+//  Example:
+//      clearLocalContacts();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
 function clearLocalContacts(){
     localStorage.removeItem(sName);
     contacts = null;
     showContacts();
 }
 
+
+//==============================================================================
+//  Description:
+//      This function handles the request from the user to get the contacts from
+//      the local storage and show them to the user.
+//  
+//  Parameters:
+//            
+//  Example:
+//      getLocalContacts();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
 function getLocalContacts(){
     getContactsFromLocalStorage();
     if(contacts == null){

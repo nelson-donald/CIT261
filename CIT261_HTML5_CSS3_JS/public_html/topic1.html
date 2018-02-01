@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Donald Nelson - CIT261 - Topic 1</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+        <script src="javascript/topic.js" type="text/javascript"></script>
+        
+        <script>
+            
+ 
+//==============================================================================
+//Properties
+//==============================================================================
+var contacts = new Array();            
+
+
+
+//==============================================================================
+//  Description:
+//      This function does a basic loop and outputs the result to the element 
+//      name passed to the function
+//  
+//  Parameters:
+//      elementName - The element name where the result should be posted
+//      
+//  Example:
+//      forLoop( 'div_for_loop_result' );
+//      
+//  Coder:
+//      Donald Nelson
+//==============================================================================
+function forLoop(elementName){
+    //Declare the result variable
+    var result = "";
+    
+    //Now tell us to loop between the numbers 5 and 10 incrementing by 1
+    for (i = 5; i <= 10; i = i + 1) {
+        
+        //if the result string has any values in it, seperate the next
+        //value with a comma
+        if(result != ""){
+            result += ', ';
+        }
+        
+        //Now add the new loop value to the end result
+        result += i;
+    }
+    
+    //publish the end result to the element tag passed to the function.
+    document.getElementById(elementName).innerHTML = result;
+}
+        
+
+//==============================================================================
+//  Description:
+//      This function does a basic while loop and outputs the result to the 
+//      element name passed to the function
+//  
+//  Parameters:
+//      elementName - The element name where the result should be posted
+//      
+//  Example:
+//      whileLoop( 'div_for_loop_result' );
+//      
+//  Coder:
+//      Donald Nelson
+//==============================================================================        
+function whileLoop(elementName){
+    //Get the values from the input fields
+    var low = parseFloat(document.getElementById('input_low_num').value);
+    var high = parseFloat(document.getElementById('input_high_num').value);
+    
+    //declare our result variable which will hold the string result to return
+    var result = "";
+    
+    //Loop continuously as long as the low value is less or equal to the high val
+    while(low <= high)
+    {
+        if (low> high){
+            return;
+        } 
+         
+        //if the result string has any values in it, seperate the next
+        //value with a comma
+        if(result != ""){
+            result += ', ';
+        }
+        
+        //set the result text to the original result + the new number
+        result += low;
+        
+        //update the element 
+        document.getElementById(elementName).innerHTML = result;
+        
+        //increment the low number by 1
+        low = low + 1;
+        
+        
+    }
+}
+
+ 
+
+//==============================================================================
+//  Description:
+//      This function does a read of te select element and determines which 
+//      option was selected, then outputs the cooresponding result to the 
+//      element name passed to the function
+//  
+//  Parameters:
+//      elementName - The element name where the result should be posted
+//      
+//  Example:
+//      bestTruck( 'div_for_loop_result' );
+//      
+//  Coder:
+//      Donald Nelson
+//==============================================================================   
+function bestTruck(elementName){
+    var objSelectCarModel = document.getElementById("select_car_model");
+    var i = objSelectCarModel.selectedIndex;
+    var val = objSelectCarModel.options[i].value;
+    var result = "";
+    if (val == 1){
+        result =  "You chose the first option: " + objSelectCarModel.options[i].text;
+    }
+    else if (val==2) {
+        result = "You chose the second option: " + objSelectCarModel.options[i].text;
+    }
+    else {
+        result = "You chose the third option: " + objSelectCarModel.options[i].text;
+    }
+    
+    document.getElementById(elementName).innerHTML = result;
+}
+    
+    
+
+//==============================================================================
+//  Description:
+//      This function resets the array and then shows the array to the user.
+//  
+//  Parameters:
+//            
+//  Example:
+//      getArray();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function getArray()
+{
+    //reset the array
+    resetArray();
+    
+    //Show the contacts
+    showContacts();
+}
+
+//==============================================================================
+//  Description:
+//      This function takes the array and loopes through each entry and displays
+//      to the end user.
+//  
+//  Parameters:
+//            
+//  Example:
+//      showContacts();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function showContacts(){
+    var result = ""; 
+        for(var i = 0; i < contacts.length; i++){
+          
+            result += "<p>" + contacts[i].firstName + " " + contacts[i].lastName + " [Cell Phone] : " + contacts[i].cell + "</p>";
+        }
+        document.getElementById("div_contacts").innerHTML = result;
+}
+
+
+
+//==============================================================================
+//  Description:
+//      This function grabs the value in the input box and add its as a new 
+//      index in the array. We then output that array to the screen to prove it 
+//      was accomplished.
+//  
+//  Parameters:
+//            
+//  Example:
+//      insertArray();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function addToArray(){
+    
+    //create new object from the data in the fields
+    var l = new function(){
+        this.firstName = document.getElementById('input_first_name').value;
+        this.lastName = document.getElementById('input_last_name').value;
+        this.cell = document.getElementById('input_cell').value;
+    }
+    
+    //insert into the array
+    contacts.push(l);
+    
+    //show the contacts to the user
+    showContacts();
+}
+   
+
+//==============================================================================
+//  Description:
+//      This function resets the array back to the initial dataset with two
+//      contacts.
+//  
+//  Parameters:
+//            
+//  Example:
+//      resetArray();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function resetArray(){
+    contacts = [];
+    
+    //Add the first item to the array
+    var l = new function(){
+        this.firstName = "Donald";
+        this.lastName = "Nelson";
+        this.cell = "111-222-3333";
+    }
+    
+    contacts.push(l);
+    
+    //Add the second item to the array
+    var l = new function(){
+        this.firstName = "Zach";
+        this.lastName = "Benson";
+        this.cell = "619-555-1980";
+    }
+    
+    contacts.push(l);
+}
+
+
+    
+    
+
+            </script>
+            
+    </head>
+    <body class="dark-skin">
+        <header>
+            <img src="http://www2.byui.edu/imageLibrary/homePage/BYU-IDAHO041118_6655.jpg" >
+            <h3>Donald Nelson - CIT 261 - Brigham Young University Idaho</h3>
+        </header>
+            <nav>
+                
+            </nav>
+        <main>
+            <div class="content">
+                <p>Loops, Conditional Statements, Functions, Variables, Parameters, Arrays, Associative Arrays</p>
+            <fieldset>
+            <div>
+                <h1>For Loop</h1>
+                <input type="button" value="Begin" onclick="forLoop('div_for_loop_result')" />
+                <div id="div_for_loop_result"></div>
+            </div>
+  </fieldset>
+            <fieldset>
+            <div>
+                <h1>While Loop</h1>
+                Low Number <input id="input_low_num" type="number" /> High Number <input id="input_high_num" type="number" />
+                <br />
+                <input type="button" value="Begin" onclick="whileLoop('div_while_loop_result')" />
+                <div id="div_while_loop_result"></div>
+            </div>
+  </fieldset>
+            <fieldset>
+            <div>
+                <h1>Conditional Statements</h1>
+                <p>Which has the most durable truck?</p>
+                <select id="select_car_model">
+                    <option value="1" >Chevy</option>
+                    <option value="2">Dodge</option>   
+                    <option value="3">Ford</option>             
+                </select>
+                <input type="button" value="Begin" onclick="bestTruck('div_conditional_statement_result')" />
+                <div id="div_conditional_statement_result"></div>
+            </div>
+  </fieldset>
+            <fieldset>
+            <div>
+                <h1>Arrays</h1>
+                <input type="button" onclick="getArray()" value="Start" >
+                <div id="div_contacts"></div>
+                <br/>
+                <div><p>First Name: <input id="input_first_name" type="text" /></p><p>Last Name: <input id="input_last_name"  type="text" /></p><p>Cell: <input id="input_cell" type="text" /></p></div>
+                <input type="button" onclick="addToArray()" value="Add" >
+            </div>
+  </fieldset>
+            </div>
+        </main>
+        <footer>
+            &copy Donald Nelson - BYUI - CIT261
+        </footer>
+        <script>
+            getMenu();
+            </script>
+    </body>
+</html>

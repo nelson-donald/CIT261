@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Donald Nelson - CIT261 - Topic 2</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+        <script src="javascript/topic.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            
+            
+//==============================================================================
+//Properties
+//==============================================================================
+//This is the array that is used to contril the cars
+var cars = [];
+
+
+//==============================================================================
+//  Description:
+//      This function created a new object called car.
+//  
+//  Parameters:
+//            
+//  Example:
+//      car();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function car() {
+    this.make = document.getElementById('input_make').value;
+    this.model = document.getElementById('input_model').value;
+    this.year = document.getElementById('input_year').value;
+    this.description = function() {
+        return "Make " + this.make + "<br />" +
+                "Model " + this.model + "<br />" +
+                "Year " + this.year + "<br />";
+    };
+}   
+            
+            
+
+//==============================================================================
+//  Description:
+//      This function is used to add a car to the array. once added successfully
+//      to the array, the input fields are cleared.
+//  
+//  Parameters:
+//            
+//  Example:
+//      addCar();
+//      
+//  Coder:
+//      Donald Nelson
+//==============================================================================
+function addCar () {
+    //create the new car object
+    cars.push(new car());
+    
+    //on the first car
+    if (cars.length == 1) {
+        //create the new button and the text
+        var b = document.createElement("BUTTON");
+        var c = document.createTextNode("Car 1");
+                    
+        //add the textnode to the button element
+        b.appendChild(c);
+                    
+        //add a listener to the button to fire off when it is clicked
+        b.addEventListener("click", function() { getCars(1); });
+                    
+        //now add the button to the document to make it visible to
+        //the end user
+        document.getElementById('div_car').appendChild(b);
+    }//on the second car
+    else if (cars.length == 2) {
+        //create the new button and the text
+        var b = document.createElement("BUTTON");
+        var c = document.createTextNode("Car 2");
+                    
+        //add the textnode to the button element
+        b.appendChild(c);
+                    
+        //add a listener to the button to fire off when it is clicked
+        b.addEventListener("click", function() { getCars(2); });
+                    
+        //now add the button to the document to make it visible to
+        //the end user
+        document.getElementById('div_car').appendChild(b);
+    }
+    else if (cars.length == 3) {
+        var b = document.createElement("BUTTON");
+        var c = document.createTextNode("Car 3");
+        b.appendChild(c);
+        b.addEventListener("click", function() { getCars(3); });
+        document.getElementById('div_car').appendChild(b);
+        
+        //clear out the elements that allow us to input new cars.
+        //max out the cars at3
+        document.getElementById('div_car_input').innerHTML = '';
+        return;
+    }
+    //clear out the input elemnts so that the next car is ready
+    document.getElementById('input_make').value='';
+    document.getElementById('input_model').value='';
+    document.getElementById('input_year').value='';
+}
+         
+//==============================================================================
+//  Description:
+//      This function calls the createAJAX() function and then uses the ajax 
+//      object to call the web server and pull the JSON file back. once it has 
+//      the json text, it parses it and acts on it.
+//  
+//  Parameters:
+//            
+//  Example:
+//      getJSON();
+//      
+//  Coder:
+//      Donald Nelson
+//==============================================================================   
+function getCars(number) {
+    document.getElementById('div_car_Description').innerHTML = cars[number-1].description();
+}
+       </script>
+    </head>
+    <body class="dark-skin">
+        <header>
+            <img src="http://www2.byui.edu/imageLibrary/homePage/BYU-IDAHO041118_6655.jpg" >
+            <h3>Donald Nelson - CIT 261 - Brigham Young University Idaho</h3>
+        </header>
+            <nav>
+                
+            </nav>
+        <main>
+            <div class="content">
+                <p>Object Creation Functions, Inheritance, Properties, Methods, Instantation</p>
+                <fieldset>
+                    <div id="div_car_input">
+                        <input type="text" id="input_make" placeholder="Make"><br>
+                        <input type="text" id="input_model" placeholder="Model"><br>
+                        <input type="text" id="input_year" placeholder="Year"><br>
+                        <button onclick="addCar()" id="button_add_car">Add Vehicle</button>
+                    </div>
+                    <div id="div_car" class="float50">&nbsp;</div>
+                    <div id="div_car_Description" class="float50">&nbsp;</div>
+
+                </fieldset>
+            </div>
+        </main>
+        <footer>
+            &copy Donald Nelson - BYUI - CIT261
+        </footer>
+        <script>
+            getMenu();
+            </script>
+    </body>
+</html>

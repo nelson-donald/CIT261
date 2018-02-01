@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+        <script src="javascript/topic.js" type="text/javascript"></script>
+        <script>
+            var contacts = null;
+            var sName = "contacts";
+            
+
+//==============================================================================
+//  Description:
+//      This function uses the XMLHttpRequest object to call my webserver and 
+//      retrieve the contacts.html JSON file.
+//  
+//  Parameters:
+//            
+//  Example:
+//      getJSON();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function getJSON() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "json/contacts.html", true);
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            contacts = null;
+            getContactsFromLocalStorage();
+            if(contacts == null){
+                //Convert the JSON text back to an object
+                contacts = JSON.parse(this.responseText);
+                saveContactsToLocalStorage();
+                showContacts();
+            }
+            else
+            {
+                alert("You already have some contacts saved locally. We will not overwrite them. Instead we will jsut show you the contacts pulled from the server.");
+                //Convert the JSON text back to an object
+                contacts = JSON.parse(this.responseText);
+                showContacts();
+            }
+        }
+    }
+    xhttp.send();   
+}
+
+function saveContactsToLocalStorage(){
+    localStorage.setItem(sName, JSON.stringify(contacts));
+    //alert(contacts.items.length);
+}
+
+function getContactsFromLocalStorage(){
+    contacts = JSON.parse(localStorage.getItem(sName));
+                //alert(contacts.items.length);
+}
+
+function clearLocalContacts(){
+    localStorage.removeItem(sName);
+    contacts = null;
+    showContacts();
+}
+
+function getLocalContacts(){
+    getContactsFromLocalStorage();
+    if(contacts == null){
+        alert("You do not have any contacts saved localy. Please pull contacts from the server.");
+    }
+    showContacts();
+}
+
+//==============================================================================
+//  Description:
+//      This function displays all the contacts in the JSON object array.
+//  
+//  Parameters:
+//            
+//  Example:
+//      showContacts();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function showContacts(){
+    var result = ""; 
+    try{
+        for(var i = 0; i < contacts.items.length; i++){
+          
+            result += "<p>" + contacts.items[i].firstName + " " + contacts.items[i].lastName + " [Cell Phone] : " + contacts.items[i].cell + "</p>";
+        }
+    }catch(e){}
+    finally{
+        document.getElementById("div_contacts").innerHTML = result;
+}}
+
+
+//==============================================================================
+//  Description:
+//      This function adds a new contact to the JSON object array.
+//  
+//  Parameters:
+//            
+//  Example:
+//      addToJSON();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function addToJSON(){
+    var l = new function(){
+        this.firstName = document.getElementById('input_first_name').value;
+        this.lastName = document.getElementById('input_last_name').value;
+        this.cell = document.getElementById('input_cell').value;
+    }
+    
+    contacts.items.push(l);
+    saveContactsToLocalStorage();
+    showContacts();
+}
+            </script>
+    </head>
+    <body class="dark-skin">
+        <header>
+            <img src="http://www2.byui.edu/imageLibrary/homePage/BYU-IDAHO041118_6655.jpg" >
+            <h3>Donald Nelson - CIT 261 - Brigham Young University Idaho</h3>
+        </header>
+            <nav>
+                
+            </nav>
+        <main>
+            <div class="content">
+                <fieldset>
+                    <input type="button" onclick="getJSON()" value="Get Contacts From Server" >
+                    <input type="button" onclick="getLocalContacts()" value="Get Contacts From Local Storage" >
+                    <input type="button" onclick="clearLocalContacts()" value="Clear Local Storage" >
+                    <div id="div_contacts"></div>
+                    <br/>
+                    <div><p>First Name: <input id="input_first_name" type="text" /></p><p>Last Name: <input id="input_last_name"  type="text" /></p><p>Cell: <input id="input_cell" type="text" /></p></div>
+                    <input type="button" onclick="addToJSON()" value="Add" > 
+                </fieldset>
+            </div>
+        </main>
+        <footer>
+            &copy Donald Nelson - BYUI - CIT261
+        </footer>
+        <script>
+            getMenu();
+            </script>
+    </body>
+</html>

@@ -10,7 +10,126 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/style.css" rel="stylesheet" type="text/css"/>
+        <link href="css/utagz_orange1.css" rel="stylesheet" type="text/css"/>
         <script src="javascript/topic.js" type="text/javascript"></script>
+        <script>
+//==============================================================================
+//Properties
+//==============================================================================
+var contacts = null;
+            
+//==============================================================================
+//  Description:
+//      This function uses the XMLHttpRequest object to call my webserver and 
+//      retrieve the contacts.html JSON file.
+//  
+//  Parameters:
+//            
+//  Example:
+//      getJSON();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function getJSON() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "json/contacts.html", true);
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            contacts = null;
+            
+            //Convert the JSON text back to an object
+            contacts = JSON.parse(this.responseText);
+            
+            showContacts();
+            
+        }
+    }
+    xhttp.send();   
+}
+
+
+//==============================================================================
+//  Description:
+//      This function uses the XMLHttpRequest object to call my webserver and 
+//      retrieve the contacts.html JSON file.
+//  
+//  Parameters:
+//            
+//  Example:
+//      getJSON();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function setUTAGZ(){
+    //h1 label for contacts
+    document.getElementById("h1_contacts").style.backgroundColor = "orangered";
+    document.getElementById("h1_contacts").style.padding="5px";
+    document.getElementById("h1_contacts").style.float="left";
+    document.getElementById("h1_contacts").style.fontWeight="bold";
+    document.getElementById("h1_contacts").style.color="white";
+        
+    //Div container for Contacts
+    document.getElementById("div_contacts").style.backgroundColor="white";
+    document.getElementById("div_contacts").style.border="1px solid orangered";
+    document.getElementById("div_contacts").style.padding="0px";
+    document.getElementById("div_contacts").style.width="100%";
+
+    var oddeven = true;
+    for(var i = 0; i < contacts.items.length; i++){
+        
+            document.getElementById("contact_name_" + i).style.maxWidth="50%";
+            document.getElementById("contact_name_" + i).style.float="left";
+            document.getElementById("contact_phone_" + i).style.maxWidth="50%";
+            document.getElementById("contact_phone_" + i).style.float="left";
+            
+        if(oddeven){
+            document.getElementById("contact_name_" + i).style.backgroundColor="#bfbfbf";
+            document.getElementById("contact_phone_" + i).style.backgroundColor="#bfbfbf";
+            document.getElementById("contact_name_" + i).style.color="white";
+            document.getElementById("contact_phone_" + i).style.color="white";
+            oddeven=false;
+        }
+        else
+        {
+            oddeven=true;
+        }
+    }
+}
+
+
+
+//==============================================================================
+//  Description:
+//      This function uses the XMLHttpRequest object to call my webserver and 
+//      retrieve the contacts.html JSON file.
+//  
+//  Parameters:
+//            
+//  Example:
+//      getJSON();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function showContacts(){
+    document.getElementById("div_contact_list").innerHTML = "";
+    var result = ""; 
+    
+    try{
+        for(var i = 0; i < contacts.items.length; i++){
+            result += "<div>";
+            result += '<div id="contact_name_' + i + '">' + contacts.items[i].firstName + " " + contacts.items[i].lastName + '</div>';
+            result += '<div id="contact_phone_' + i + '">' + contacts.items[i].cell + '</div>';
+            result += '</div>';
+        }
+    }catch(e){}
+    finally{
+    }
+    document.getElementById("div_contact_list").innerHTML = result;
+}
+        </script>
     </head>
     <body class="dark-skin">
         <header>
@@ -22,13 +141,29 @@ and open the template in the editor.
             </nav>
         <main>
             <div class="content">
+                <input type="button" onclick="setUTAGZ()" value="Set CSS via Javascript" >
+                <div id="div_contacts" class="orange_border_div">
+                    <h1 id="h1_contacts" class="orange_border_header">Contacts</h1>
+                    <div class="clear">
+                        
+                    </div>
+                    
+                    <div id="div_contact_list">
+                    </div>
+                    <div class="clear">
+                        
+                    </div>
+                </div>
             </div>
+            
+            
         </main>
         <footer>
             &copy Donald Nelson - BYUI - CIT261
         </footer>
         <script>
             getMenu();
+            getJSON();
             </script>
     </body>
 </html>

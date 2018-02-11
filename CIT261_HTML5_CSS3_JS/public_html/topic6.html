@@ -11,6 +11,141 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/style.css" rel="stylesheet" type="text/css"/>
         <script src="javascript/topic.js" type="text/javascript"></script>
+        <script>
+//==============================================================================
+//Properties
+//==============================================================================
+var contacts = null;
+            
+//==============================================================================
+//  Description:
+//      This function uses the XMLHttpRequest object to call my webserver and 
+//      retrieve the contacts.html JSON file.
+//  
+//  Parameters:
+//            
+//  Example:
+//      getJSON();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function getJSON() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "json/contacts.html", true);
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            contacts = null;
+            
+            //Convert the JSON text back to an object
+            contacts = JSON.parse(this.responseText);
+            
+            showContacts();
+            
+        }
+    }
+    xhttp.send();   
+}
+
+//==============================================================================
+//  Description:
+//      This function uses splice to cut out an item in an array.
+//  
+//  Parameters:
+//      i = The index of the number that should be removed
+//            
+//  Example:
+//      deleteContact(2);
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function deleteContact(i){
+    contacts.items.splice(i,1);
+    showContacts();
+}
+
+//==============================================================================
+//  Description:
+//      This function uses the XMLHttpRequest object to call my webserver and 
+//      retrieve the contacts.html JSON file.
+//  
+//  Parameters:
+//            
+//  Example:
+//      getJSON();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function showContacts(){
+    document.getElementById("div_contacts").innerHTML = "";
+    var result = ""; 
+    try{
+        for(var i = 0; i < contacts.items.length; i++){
+            var divContact = document.createElement("div");
+            var divInfo = document.createElement("div");
+            divInfo.classList.add('width75');
+            var textnode = document.createTextNode(contacts.items[i].firstName + " " + contacts.items[i].lastName);
+     
+                    divInfo.appendChild(textnode);
+            
+            var divRemove = document.createElement("div");
+                divRemove.classList.add('width25');
+            divRemove.innerHTML = '<input type="button" value="Delete" onclick="deleteContact(\''+i+'\')">';
+            
+            
+            divContact.appendChild(divInfo);
+            divContact.appendChild(divRemove);
+            
+            document.getElementById("div_contacts").appendChild(divContact);
+        }
+    }catch(e){}
+    finally{
+    }
+}
+
+//==============================================================================
+//  Description:
+//      This function uses the insertBefore function to insert a new element 
+//      into the dom model before the specified othere element.
+//  
+//  Parameters:
+//            
+//  Example:
+//      insertBefore2();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function insertBefore2(){
+    var divContacts = document.getElementById("div_contacts");
+    var newItem = document.createElement("h2");
+    var h1text = document.createTextNode("MY CONTACTS");
+    newItem.appendChild(h1text);
+    divContacts.insertBefore(newItem,divContacts.childNodes[0]);
+    
+}
+
+//==============================================================================
+//  Description:
+//      This function uses removeChild function to remove a child element from 
+//      another DOM element
+//      
+//  Parameters:
+//            
+//  Example:
+//      removeChild2();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function removeChild2(){
+    var divContacts = document.getElementById("div_contacts");
+    divContacts.removeChild(divContacts.childNodes[divContacts.childNodes.length-1])
+}
+    
+        </script>
     </head>
     <body class="dark-skin">
         <header>
@@ -18,10 +153,17 @@ and open the template in the editor.
             <h3>Donald Nelson - CIT 261 - Brigham Young University Idaho</h3>
         </header>
             <nav>
-                
+                 
             </nav>
         <main>
             <div class="content">
+                <fieldset>
+                    <input type="button" onclick="getJSON()" value="Get Contacts From Server" >
+                    <input type="button" onclick="insertBefore2()" value="Insert Before" >
+                    <input type="button" onclick="removeChild2()" value="Remove last Child" >
+                    <div id="div_contacts"></div>
+                     
+                </fieldset>
             </div>
         </main>
         <footer>

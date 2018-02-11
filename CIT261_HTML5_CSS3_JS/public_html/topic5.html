@@ -50,7 +50,7 @@ function getJSON() {
             }
             else
             {
-                alert("You already have some contacts saved locally. We will not overwrite them. Instead we will jsut show you the contacts pulled from the server.");
+                alert("You already have some contacts saved locally. We will not overwrite them. Instead we will just show you the contacts pulled from the server.");
                 //Convert the JSON text back to an object
                 contacts = JSON.parse(this.responseText);
                 showContacts();

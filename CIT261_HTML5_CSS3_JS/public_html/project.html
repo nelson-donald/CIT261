@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+        <script src="javascript/topic.js" type="text/javascript"></script>
+        <script>
+//==============================================================================
+//Properties
+//==============================================================================  
+var tiles = [];
+var game;
+            
+
+//==============================================================================
+//  Description:
+//      This function clears the game variables, and resets the div tags back 
+//      to the starting point.//      
+//  
+//  Parameters:
+//            
+//  Example:
+//      newGame();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+    function newGame(){
+        tiles = [];
+        
+        for(y = 0; y < 3; y++){
+            for(x = 0; x < 3; x++)
+            {
+                var name = "div_" + x + "_" + y;
+                var nameBack = "div_" + x + "_" + y + "_back";
+                //alert(name);
+                
+                //Fix the Divs
+                var cell = document.getElementById(name)
+                cell.className = "tile";
+                
+                //hide the tile again
+                cell.style.transform="rotateY(-180deg)";
+                //Fix the Divs
+                
+                var cellBack = document.getElementById(nameBack)
+                cellBack.className = "tile";
+                
+                //hide the tile again
+                cellBack.style.transform="rotateY(0deg)";
+                cellBack.style.backgroundImage='url("http://nelsagen.com/images/air.jpg")';
+                
+                //create the object that will store the game tile information
+                var tile = new Object();
+                tile.x = x;
+                tile.y = y;
+                tile.owner = 0;
+                tile.divName = name;
+                tile.divNameBack = nameBack;
+                
+                tiles.push(tile);
+                
+            } 
+        }
+                
+        game = new Object();
+        game.player1Turn = true;
+        game.gameOver = false;
+        game.player1Name = "Player 1";
+        game.player2Name = "Player 2";
+        game.winner = "";
+        game.tiles = tiles;
+        game.catsGameName = "CATS game";
+        
+                //alert(game.tiles[3*0*0].divName);
+        
+        
+        document.getElementById("h2_winner_result").innerHTML = game.winner;
+    }
+ 
+
+//==============================================================================
+//  Description:
+//      This function is used only when a touch input is detected. It will set 
+//      the tile owner and change the graphic to the appropriate image      
+//  
+//  Parameters:
+//            
+//  Example:
+//      setTouchOwner(2,1);
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+    function setTouchOwner(x,y){
+        
+        var cell = document.getElementById(game.tiles[(3*y) + x].divName);
+        var cellBack = document.getElementById(game.tiles[(3*y) + x].divNameBack);
+        
+        //alert(game.tiles[(3*y) + x].divNameBack);
+        //set the owner
+        var result = setOwner(x,y);
+        
+        //alert(result);
+        if (result === game.player1Name){
+            cell.style.transform="rotateY(0)";
+            cellBack.style.transform="rotateY(-180deg)";
+            cell.style.backgroundImage='url("http://nelsagen.com/images/x2.png")';
+        }
+        if (result === game.player2Name){
+            cell.style.transform="rotateY(0)";
+            cellBack.style.transform="rotateY(-180deg)";
+            cell.style.backgroundImage='url("http://nelsagen.com/images/o2.png")';;
+        }
+        
+        //once the cell is claimed, check for winner;
+        checkForWinner();
+    }
+
+//==============================================================================
+//  Description:
+//      This function is used only when a click input is detected. It will set 
+//      the tile owner and change the graphic to the appropriate image      
+//  
+//  Parameters:
+//            
+//  Example:
+//      setClickOwner(2,1)
+//      
+//  Coder:
+//      Donald Nelson
+//==============================================================================     
+    function setClickOwner(x,y){
+        
+        var cell = document.getElementById(game.tiles[(3*y) + x].divName);
+        var cellBack = document.getElementById(game.tiles[(3*y) + x].divNameBack);
+        
+        //alert(game.tiles[(3*y) + x].divNameBack);
+        //set the owner
+        var result = setOwner(x,y);
+        
+        //alert(result);
+        if (result === game.player1Name){
+            cell.style.transform="rotateY(0)";
+            cellBack.style.transform="rotateY(-180deg)";
+            cell.style.backgroundImage='url("http://nelsagen.com/images/x.png")';
+        }
+        if (result === game.player2Name){
+            cell.style.transform="rotateY(0)";
+            cellBack.style.transform="rotateY(-180deg)";
+            cell.style.backgroundImage='url("http://nelsagen.com/images/o.png")';;
+        }
+        
+        //once the cell is claimed, check for winner;
+        checkForWinner();
+}
+
+
+//==============================================================================
+//  Description:
+//      This function is used to set the owner of the tile, and to switch 
+//      between player 1 and player 2 turns
+//  
+//  Parameters:
+//            
+//  Example:
+//      setOwner(2,1)
+//      
+//  Coder:
+//      Donald Nelson
+//==============================================================================  
+    function setOwner(x,y){
+        
+        //If the game is over, return and dont process anything;
+        if(game.gameOver){
+            return;
+        }
+        
+        //if the cell is unclaimed
+        if(game.tiles[(3*y) + x].owner === 0){
+            //alert('t');
+            //if its player 1's turn
+            if(game.player1Turn){
+                game.tiles[(3*y) + x].owner = 1;
+                game.player1Turn = false;
+                return game.player1Name;
+
+            }else
+            {
+                game.tiles[(3*y) + x].owner = 2;
+                game.player1Turn = true;
+                return game.player2Name;
+            }   
+        }
+        else
+        {
+            return "";
+        }
+        
+    }
+            
+
+//==============================================================================
+//  Description:
+//      This function is used validate is a run of 3 tiles exists and for which 
+//      player
+//  
+//  Parameters:
+//            
+//  Example:
+//      checkForWinner()
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+    function checkForWinner(){
+        
+        var winnerPlayer1 = 0;
+        var winnerPlayer2 = 0;
+        var tilesRemaining = 9;
+        
+        //check rows first
+        for(y = 0; y < 3; y++){
+            winnerPlayer1 = 0;
+            winnerPlayer2 = 0;
+            for(x = 0; x < 3; x++)
+            {                
+                //its been chosen by someone
+                if(game.tiles[(3*y) + x].owner == 1 )
+                {
+                    winnerPlayer1+=1;
+                }
+                if(game.tiles[(3*y) + x].owner == 2 )
+                {
+                    winnerPlayer2+=1;
+                }
+            }
+            
+            if(winnerPlayer1 == 3){
+                game.winner = game.player1Name
+                game.gameOver = true;
+                alertWinner();
+                return;
+            }
+            if(winnerPlayer2 == 3){
+                game.winner = game.player2Name
+                game.gameOver = true;
+                alertWinner();
+                return;
+            }
+        }
+        
+        //Now check for columns
+        for(x = 0; x < 3; x++){
+            winnerPlayer1 = 0;
+            winnerPlayer2 = 0;
+            for(y = 0; y < 3; y++)
+            {
+                //its been chosen by someone
+                if(game.tiles[(3*y) + x].owner == 1 )
+                {
+                    winnerPlayer1+=1;
+                }
+                if(game.tiles[(3*y) + x].owner == 2 )
+                {
+                    winnerPlayer2+=1;
+                }
+            }
+            
+            if(winnerPlayer1 == 3){
+                game.winner = game.player1Name
+                game.gameOver = true;
+                alertWinner();
+                return;
+            }
+            if(winnerPlayer2 == 3){
+                game.winner = game.player2Name
+                game.gameOver = true;
+                alertWinner();
+                return;
+            }
+        }
+        
+        //now check for diagnals
+        winnerPlayer1 = 0;
+        winnerPlayer2 = 0;
+        if(game.tiles[0].owner == 1){
+            winnerPlayer1 += 1;
+        }
+        if(game.tiles[4].owner == 1){
+            winnerPlayer1 += 1;
+        }
+        if(game.tiles[8].owner == 1){
+            winnerPlayer1 += 1;
+        }
+        if(winnerPlayer1 == 3){
+                game.winner = game.player1Name
+                game.gameOver = true;
+                alertWinner();
+                return;
+        }
+        
+        winnerPlayer1 = 0;
+        winnerPlayer2 = 0;
+        if(game.tiles[2].owner == 1){
+            winnerPlayer1 += 1;
+        }
+        if(game.tiles[4].owner == 1){
+            winnerPlayer1 += 1;
+        }
+        if(game.tiles[6].owner == 1){
+            winnerPlayer1 += 1;
+        }
+        if(winnerPlayer1 == 3){
+                game.winner = game.player1Name
+                game.gameOver = true;
+                alertWinner();
+                return;
+        }
+        
+        winnerPlayer1 = 0;
+        winnerPlayer2 = 0;
+        if(game.tiles[0].owner == 2){
+            winnerPlayer2 += 1;
+        }
+        if(game.tiles[4].owner == 2){
+            winnerPlayer2 += 1;
+        }
+        if(game.tiles[8].owner == 2){
+            winnerPlayer2 += 1;
+        }
+        if(winnerPlayer2 == 3){
+                game.winner = game.player2Name
+                game.gameOver = true;
+                alertWinner();
+                return;
+        }
+        
+        winnerPlayer1 = 0;
+        winnerPlayer2 = 0;
+        if(game.tiles[2].owner == 2){
+            winnerPlayer2 += 1;
+        }
+        if(game.tiles[4].owner == 2){
+            winnerPlayer2 += 1;
+        }
+        if(game.tiles[6].owner == 2){
+            winnerPlayer2 += 1;
+        }
+        if(winnerPlayer2 == 3){
+                game.winner = game.player2Name
+                game.gameOver = true;
+                alertWinner();
+                return;
+        }
+        
+        
+        //If no one has won by this point, check that there are no more tiles before calling a CATS game.
+        for(y = 0; y < 3; y++){
+            winnerPlayer1 = 0;
+            winnerPlayer2 = 0;
+            for(x = 0; x < 3; x++)
+            {                
+                //its been chosen by someone
+                if(game.tiles[(3*y) + x].owner == 1 )
+                {
+                    tilesRemaining -= 1;
+                }
+                if(game.tiles[(3*y) + x].owner == 2 )
+                {
+                    tilesRemaining -= 1;
+                }
+            }            
+        }
+        if(tilesRemaining == 0){
+                
+                game.winner = game.catsGameName
+                game.gameOver = true;
+                alertWinner();
+                return;
+            }
+        
+        
+    }
+ 
+//==============================================================================
+//  Description:
+//      This function is used alert the players that a winner has been found
+//  
+//  Parameters:
+//            
+//  Example:
+//      alertWinner("player 1")
+//      
+//  Coder:
+//      Donald Nelson
+//==============================================================================   
+    function alertWinner(){
+        if (game.winner === game.catsGameName){
+            document.getElementById("h2_winner_result").innerHTML = game.winner + "! Try again."
+        }
+        else
+        {
+            document.getElementById("h2_winner_result").innerHTML = game.winner + " won the game!"
+        }
+    }
+</script>
+
+<style>
+                
+.game_board{
+    width:192px;
+    height:192px;
+    display: block;
+}
+
+.row{
+    clear:both;
+}
+
+.cell{
+    border:1px white solid;
+    float:left;
+    width:64px;
+    height:64px;
+    background-color: #bfbfbf;
+    position:relative;
+    text-align:center;
+}
+
+.tile{
+    backface-visibility: hidden;
+    transition:transform 0.5s;
+    position:absolute;
+    left:0;
+    top:0;
+    height:100%; 
+    width:100%;
+    border:1px white solid;
+    float:left;
+    width:64px;
+    height:64px;
+    background-repeat:no-repeat;
+    background-size:100% 100%;
+}
+
+</style>
+    </head>
+    <body class="dark-skin">
+        <header>
+            <img src="http://www2.byui.edu/imageLibrary/homePage/BYU-IDAHO041118_6655.jpg" >
+            <h3>Donald Nelson - CIT 261 - Brigham Young University Idaho</h3>
+        </header>
+            <nav>
+                
+            </nav>
+        <main>
+            <div class="content">
+                <h1>DESIGN AND CODING IN PROGRESS....</h1>
+                <h1>Tic-Tac-Toe</h1>
+                <h2 id="h2_winner_result"></h2>
+                <input type="button" value="Start New Game" onclick="newGame()" />
+                <div id="div_game_board" class="game_board">
+                    <div id="div_row_0" class="row">
+                        <div class='cell' onclick="setClickOwner(0,0)" onTouchEnd="setTouchOwner(0,0)">
+                            <div id="div_0_0"></div>
+                            <div id="div_0_0_back"></div>
+                        </div>
+                        <div class='cell' onclick="setClickOwner(1,0)" onTouchEnd="setTouchOwner(1,0)">
+                            <div id="div_1_0"></div>
+                            <div id="div_1_0_back"></div>
+                        </div>
+                        <div class='cell' onclick="setClickOwner(2,0)" onTouchEnd="setTouchOwner(2,0)">
+                            <div id="div_2_0"></div>
+                            <div id="div_2_0_back"></div>
+                        </div>
+                    </div>
+                    <div id="div_row_1" class="row">
+                        <div class='cell' onclick="setClickOwner(0,1)" onTouchEnd="setTouchOwner(0,1)">
+                            <div id="div_0_1"></div>
+                            <div id="div_0_1_back"></div>
+                        </div>
+                        <div class='cell' onclick="setClickOwner(1,1)" onTouchEnd="setTouchOwner(1,1)">
+                            <div id="div_1_1"></div>
+                            <div id="div_1_1_back"></div>
+                        </div>
+                        <div class='cell' onclick="setClickOwner(2,1)" onTouchEnd="setTouchOwner(2,1)">
+                            <div id="div_2_1"></div>
+                            <div id="div_2_1_back"></div>
+                        </div>                            
+                    </div>
+                    <div id="div_row_2" class="row">
+                        <div class='cell' onclick="setClickOwner(0,2)" onTouchEnd="setTouchOwner(0,2)">
+                            <div id="div_0_2"></div>
+                            <div id="div_0_2_back"></div>
+                        </div>
+                        <div class='cell' onclick="setClickOwner(1,2)" onTouchEnd="setTouchOwner(1,2)">
+                            <div id="div_1_2"></div>
+                            <div id="div_1_2_back"></div>
+                        </div>
+                        <div class='cell' onclick="setClickOwner(2,2)" onTouchEnd="setTouchOwner(2,2)">
+                            <div id="div_2_2"></div>
+                            <div id="div_2_2_back"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            &copy Donald Nelson - BYUI - CIT261
+        </footer>
+        <script>
+            getMenu();
+            </script>
+    </body>
+</html>

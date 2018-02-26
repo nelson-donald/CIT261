@@ -11,8 +11,35 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/style.css" rel="stylesheet" type="text/css"/>
         <script src="javascript/topic.js" type="text/javascript"></script>
+        <script>
+            
+var keyPressCount = 0;
+
+function startOnLoad(){
+    
+    document.getElementById("h2_onload").innerHTML = "This text showed up becuase of the OnLoad event";
+}
+
+function keyPresses(){
+    keyPressCount += 1;
+    document.getElementById("h2_keypress").innerHTML = keyPressCount;
+}
+
+function onTouchOrClick(text){
+    event.preventDefault();    
+    document.getElementById("h2_onTouchOrClick").innerHTML = text;
+}
+
+function onMouseOver(){
+    document.getElementById("div_mouse_events").style.backgroundColor = "red";
+}
+
+function onMouseOut(){    
+    document.getElementById("div_mouse_events").style.backgroundColor = "gray";
+}
+            </script>
     </head>
-    <body class="dark-skin">
+    <body class="dark-skin" onload="startOnLoad()">
         <header>
             <img src="http://www2.byui.edu/imageLibrary/homePage/BYU-IDAHO041118_6655.jpg" >
             <h3>Donald Nelson - CIT 261 - Brigham Young University Idaho</h3>
@@ -22,6 +49,32 @@ and open the template in the editor.
             </nav>
         <main>
             <div class="content">
+                
+            <fieldset>
+                <h1>onLoad:</h1>
+                <h2 id='h2_onload'></h2>	
+            </fieldset>
+                
+            <fieldset>
+            <h2>onMouseOver</h2>
+            <div id='div_mouse_events' style='display: block; width: 100px; height: 100px; background-color: gray;'  onmouseover="onMouseOver();"  onmouseout="onMouseOut()">Use Mouse</div>
+            </fieldset>
+                
+            <fieldset>
+            <h2>onKeyDown:</h2>
+            <h2 id='h2_keypress'></h2>
+            <input type="text" onkeydown="keyPresses()">
+            </fieldset>
+                
+                
+                
+                
+            <fieldset>
+            <h1>onTouchStart vs onClick</h1>
+            <h2 id='h2_onTouchOrClick'></h2>
+            <div id="div_click_touch" style='display: block; width: 100px; height: 100px; background-color: red;' onclick="onTouchOrClick('You Clicked')" onTouchStart="onTouchOrClick('You Touched')">Touch<br /> or<br />Click</div>
+            </fieldset>
+            
             </div>
         </main>
         <footer>

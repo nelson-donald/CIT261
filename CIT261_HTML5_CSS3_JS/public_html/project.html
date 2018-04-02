@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>CIT 261 Project</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/style.css" rel="stylesheet" type="text/css"/>
@@ -20,28 +20,61 @@ and open the template in the editor.
 var tiles = [];
 var game;
 
-//this is the variable that we will use to keep consistency for the naming of 
+//these is the variable that we will use to keep consistency for the naming of 
 //our local storage identifier for the contacts JSON text
 var sPlayer1Wins = "player_1_wins";
 var sPlayer2Wins = "player_2_wins";
 var sCATSWins = "cats_wins";
+
+//used to define the voice, US Female
 var voice;
+
+
+//==============================================================================
+//Functions
+//==============================================================================  
+
                 
-function jsonParse() {
-    var xmlhttp = new XMLHttpRequest();//connection to server
+//==============================================================================
+//  Description:
+//      This function uses AJAX to grab a JSON file of the text which is to be 
+//      spoken during the game.
+//      
+//  Parameters:
+//            
+//  Example:
+//      getJSON();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
+function getJSON() {
+    var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange =
             function () {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) //is the file done loading and error free?
-                    speech = JSON.parse(xmlhttp.responseText);//pass info to the parse function
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                    speech = JSON.parse(xmlhttp.responseText);
                 
             };
-    xmlhttp.open("GET", "json/project.json", true);// Send a Request To a Server
+    xmlhttp.open("GET", "json/project.json", true);
     xmlhttp.send();
 }
 
 
 
-//Set some styles
+//==============================================================================
+//  Description:
+//      This function does some basic setup of the webpage values
+//  
+//  Parameters:
+//      sName = the named value in local storage
+//            
+//  Example:
+//      setupPage();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
 function setupPage(){
     
     document.getElementById("div_results").style.transition="height 0.8s";
@@ -54,13 +87,39 @@ function setupPage(){
     
     voice = ('US English Female');
     
-    jsonParse();
+    getJSON();
 }
             
+//==============================================================================
+//  Description:
+//      This function retrieves the value from local storage based on the item 
+//      name passed to the function
+//  
+//  Parameters:
+//      sName = the named value in local storage
+//            
+//  Example:
+//      saveCATSWinsToLocalStorage();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
 function getValueFromLocalStorage(sName){
     return localStorage.getItem(sName)
 }
 
+//==============================================================================
+//  Description:
+//      This function saves the CATS game count to local storage
+//  
+//  Parameters:
+//            
+//  Example:
+//      saveCATSWinsToLocalStorage();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
 function saveCATSWinsToLocalStorage(){
     //Get the last number of wins
     var tmpCATSWins = getValueFromLocalStorage(sCATSWins);
@@ -73,6 +132,18 @@ function saveCATSWinsToLocalStorage(){
     responsiveVoice.speak(speech[sCATSWins],voice);
 }
 
+//==============================================================================
+//  Description:
+//      This function saves the win count for player 1 to local storage
+//  
+//  Parameters:
+//            
+//  Example:
+//      savePlayer1WinsToLocalStorage();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
 function savePlayer1WinsToLocalStorage(){
     //Get the last number of wins
     var tmpPlayer1Wins = getValueFromLocalStorage(sPlayer1Wins);
@@ -85,6 +156,18 @@ function savePlayer1WinsToLocalStorage(){
     responsiveVoice.speak(speech[sPlayer1Wins],voice);
 }
 
+//==============================================================================
+//  Description:
+//      This function saves the win count for player 2 to local storage
+//  
+//  Parameters:
+//            
+//  Example:
+//      savePlayer2WinsToLocalStorage();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
 function savePlayer2WinsToLocalStorage(){
     //Get the last number of wins
     var tmpPlayer2Wins = getValueFromLocalStorage(sPlayer2Wins);
@@ -97,6 +180,19 @@ function savePlayer2WinsToLocalStorage(){
     responsiveVoice.speak(speech[sPlayer2Wins],voice);
 }
 
+//==============================================================================
+//  Description:
+//      This function updates the document elements to show the wins of each 
+//      player.     
+//  
+//  Parameters:
+//            
+//  Example:
+//      updateScoreboard();
+//      
+//  Coder:
+//      Donald Nelson
+//============================================================================== 
 function updateScoreboard()
 {
     

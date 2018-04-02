@@ -142,6 +142,35 @@ function cardAnimate(){
     }
     
 }
+
+function Playsound(ocean) {
+                var path = "Audio/Ocean_Waves-Mike_Koenig-980635527.mp3"
+                var snd = new Audio('Audio/Ocean_Waves-Mike_Koenig-980635527.mp3');
+                snd.play();
+            }
+
+
+var isOceanPlaying = false;
+var sndOcean = null;
+var path = "audio/coin.mp3"
+function Playsound() {
+    //alert("here");
+    if(isOceanPlaying == true){
+        //alert("true");
+                sndOcean.pause();
+                isOceanPlaying=false;
+        
+    }else
+    {
+        //alert("false");
+                sndOcean = new Audio(path);
+                sndOcean.currentTime = 0;
+                sndOcean.play();
+                isOceanPlaying=true;
+        
+    }
+            }
+
         </script>
         
         
@@ -192,6 +221,7 @@ function cardAnimate(){
         </main>
         <footer>
             &copy Donald Nelson - BYUI - CIT261
+            <input type="button" value="clickme" onclick="Playsound()" />
         </footer>
         <script>
             getMenu();
